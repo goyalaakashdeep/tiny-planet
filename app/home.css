@@ -206,3 +206,98 @@ html, body { overflow-x: clip; }
 .pick:hover { transform: translate(-50%, -93%) rotate(var(--r)) scale(1.1); }
 .friends.done .pick { transform: translate(-50%, -93%) rotate(var(--r)) scale(0.92); }
 .friends.done .pick.chosen { transform: translate(-50%, -93%) rotate(var(--r)) scale(1.28); }
+
+/* ================= the planet, drawn exactly like the app (360 × 760 app points, scaled) ================= */
+.planet-wrap, .friends, .bubble:not(.pbubble) { display: none; }
+.scene { position: relative; }
+.apptitle { position: absolute; z-index: 4; left: max(20px, calc(50% - 520px)); top: 8px; }
+.apptitle .kicker { color: #fff; opacity: .9; }
+.apptitle .big { font-weight: 900; font-size: clamp(32px, 4.6vh, 44px); line-height: 1.05; margin-top: 2px; text-shadow: 0 2px 12px rgba(20,14,60,.25); }
+.world { position: absolute; left: 0; top: 0; width: 360px; height: 760px; transform-origin: 0 0; }
+.spinner { position: absolute; left: 52px; top: 256px; width: 256px; height: 256px; }
+.spinner > * { position: absolute; }
+.globe { inset: 0; border-radius: 50%; background: radial-gradient(circle 204.8px at 38% 30%, #8FF0C4 0px, #3DBE96 102.4px, #1F8A78 204.8px); }
+.spots { inset: 0; }
+.spots i { position: absolute; border-radius: 50%; background: #0A4A50; opacity: .25; }
+.tuft, .planted { left: 50%; top: 50%; }
+.tuft { width: 20px; height: 17px; margin: -8.5px 0 0 -10px; }
+.planted { transform-origin: 50% 50%; }
+.planted img { width: 100%; height: 100%; display: block; transform-origin: 50% 96%; }
+.planted.fresh img { animation: grow .7s cubic-bezier(.3,1.5,.5,1) both; }
+@keyframes grow { from { transform: scale(.2, .01); } }
+.planted.jig img { animation: jig .5s cubic-bezier(.3,1.6,.5,1); }
+@keyframes jig { 30% { transform: scale(.88, 1.16) rotate(10deg); } }
+.orbiter { position: absolute; width: 48px; height: 48px; left: 0; top: 0; }
+.pip { position: absolute; left: 142px; top: 189.9px; width: 76px; height: 72.2px; overflow: visible; }
+#pipInner { transform-box: view-box; transform-origin: 38px 72.2px; }
+.moons { position: absolute; inset: 0; pointer-events: none; }
+.moon { position: absolute; width: 56px; margin-left: -28px; border: 0; padding: 0; background: none; cursor: pointer; pointer-events: auto; display: grid; justify-items: center; gap: 2px;
+  transform: scale(.1); opacity: 0; transition: transform .5s cubic-bezier(.3,1.6,.5,1), opacity .35s; }
+.moons.on .moon { transform: scale(1); opacity: 1; }
+.moon .disc { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; }
+.moon .disc img { width: 41px; height: 41px; }
+.moon span { color: #fff; font-weight: 900; font-size: 9.5px; line-height: 1.2; }
+.moon:active .disc { transform: scale(.9); }
+.moon:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; border-radius: 12px; }
+.pbubble { position: absolute; left: 206px; top: 196px; transform: translateY(-100%); width: max-content; max-width: 150px; background: #fff; color: var(--ink);
+  font-weight: 900; font-size: 13px; line-height: 1.25; padding: 8px 11px; border-radius: 14px 14px 14px 4px; box-shadow: 0 6px 16px rgba(10,6,40,.25); opacity: 0; transition: opacity .3s; }
+.pbubble.on { opacity: 1; }
+.pbubble small { display: block; color: var(--muted); font-weight: 800; font-size: 11px; margin-top: 2px; }
+@media (max-width: 520px) { .apptitle { top: 0; } }
+
+/* ---------- calmer clips: no bezels, just the screen ---------- */
+.phone { padding: 0 !important; background: none !important; box-shadow: none !important; border-radius: 0; }
+.screen { border-radius: 30px; box-shadow: 0 22px 46px rgba(5, 3, 25, 0.42); outline: 1px solid rgba(255,255,255,0.07); outline-offset: -1px; }
+.ground::after { display: none; }
+
+/* ---------- the week on a little curved planet ---------- */
+.weekarc { width: 100%; height: auto; display: block; margin-top: 4px; overflow: visible; font-family: var(--round); }
+
+/* ---------- the footer is the planet's ground, with the app's round tab buttons ---------- */
+.groundbar { position: relative; padding: 70px 0 0; background: linear-gradient(180deg, var(--night), #2b2668); overflow: hidden; color: #fff; }
+.groundbar .bye { text-align: center; font-weight: 900; font-size: clamp(20px, 2.4vw, 26px); color: var(--cream); }
+.groundbar .arc { position: relative; height: clamp(200px, 22vw, 260px); margin-top: 36px; }
+.groundbar .arc::before { content: ""; position: absolute; left: 50%; top: 0; width: max(1000px, 120vw); height: 900px; transform: translateX(-50%); border-radius: 50% 50% 0 0 / 22% 22% 0 0;
+  background: radial-gradient(ellipse at 50% 0%, #9AF0C9 0%, #4FC89C 30%, #2C9A7E 70%); }
+.groundbar .tabs { position: absolute; left: 50%; top: -6px; width: min(100%, 720px); height: 100%; transform: translateX(-50%); }
+.tab { position: absolute; transform: translate(-50%, -30%) rotate(var(--r)); display: grid; justify-items: center; gap: 6px; text-decoration: none; color: #fff; }
+.tab i { width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,0.22); display: grid; place-items: center; box-shadow: 0 6px 14px rgba(0,60,40,0.25); transition: transform .3s; }
+.tab i svg { width: 24px; height: 24px; }
+.tab.on i { background: var(--yellow); }
+.tab span { font-weight: 900; font-size: 14px; color: #fff; text-shadow: 0 1px 4px rgba(0,60,40,0.35); }
+.tab:hover i { transform: translateY(-3px); }
+.groundbar .copy { position: absolute; left: 0; right: 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); text-align: center; font-weight: 800; font-size: 13px; color: #0f4a3c; }
+.groundbar .copy a { color: #0f4a3c; }
+footer.groundbar { padding-bottom: 0; }
+@media (max-width: 600px) { .groundbar .tabs { top: 6px; } .tab i { width: 46px; height: 46px; } .tab span { font-size: 12px; } }
+
+/* ---------- calmer motion ---------- */
+.js .rise { transition: opacity 1.3s ease, transform 1.6s cubic-bezier(.2,.8,.2,1); }
+.moon { transition: transform .8s cubic-bezier(.3,1.4,.5,1), opacity .6s; }
+.hook { transition: opacity .8s, transform 1s cubic-bezier(.2,.9,.2,1); }
+.hero { transition: background 2.2s ease !important; }
+.groundbar { padding-top: 10px; }
+.groundbar .wrap { display: block; }
+.groundbar .arc { height: clamp(230px, 24vw, 300px); margin-top: 20px; }
+.groundbar .arc::before { display: none; }
+.groundbar .soil { position: absolute; inset: 0; width: 100%; height: 100%; }
+.groundbar .tabs { top: 0; width: 100%; max-width: none; left: 0; transform: none; }
+.tab { transform: translate(-50%, -18%) rotate(var(--r)); }
+.groundbar .copy { bottom: 14px; }
+@media (min-width: 900px) { .groundbar .tabs { left: 50%; width: 900px; transform: translateX(-50%); } }
+
+.rim { position: absolute; left: 0; top: 0; width: 360px; height: 760px; pointer-events: none; overflow: visible; }
+/* Pip's soap-bubble speech, like PlanetBubble */
+.pbubble { background: rgba(255,255,255,0.16); -webkit-backdrop-filter: blur(10px) saturate(1.2); backdrop-filter: blur(10px) saturate(1.2);
+  border: 1.5px solid rgba(255,255,255,0.75); border-radius: 18px; color: #fff; text-shadow: 0 1px 3px rgba(40,20,90,0.35);
+  box-shadow: 0 4px 10px rgba(60,40,120,0.18), inset 0 0 8px rgba(255,255,255,0.25); padding: 8px 12px; max-width: none; font-size: 13.5px; }
+.pbubble::before { content: ""; position: absolute; left: 10px; top: 4px; width: 20px; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.6); transform: rotate(-14deg); }
+.pbubble::after { content: ""; position: absolute; left: 14px; bottom: -14px; width: 10px; height: 10px; border-radius: 50%; border: 1.2px solid rgba(255,255,255,0.75); background: rgba(255,255,255,0.2);
+  box-shadow: -8px 10px 0 -2.5px rgba(255,255,255,0.2), -8px 10px 0 -1.5px rgba(255,255,255,0.75); }
+.pbubble .ln { display: block; white-space: nowrap; }
+.pbubble .w { display: inline-block; opacity: 0; transform: translateY(8px); transition: opacity .3s, transform .45s cubic-bezier(.3,1.6,.5,1); }
+.pbubble .w.in { opacity: 1; transform: none; }
+.pbubble .w.key { color: #FFD75A; }
+.pbubble small { color: rgba(255,255,255,0.85); font-size: 11.5px; margin-top: 3px; }
+.pbubble.on { animation: bob 2.2s ease-in-out infinite; }
+@keyframes bob { 0%,100% { translate: 0 -2px; } 50% { translate: 0 2px; } }
