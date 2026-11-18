@@ -1,0 +1,81 @@
+:root {
+  --night: #2a2478;
+  --cream: #f4f1ea;
+  --ink: #1e1a33;
+  --muted: #5a5470;
+  --headline: #f2efff;
+  --link: #4b3fb5;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+header {
+  background: var(--night);
+  color: var(--headline);
+  padding: 2.4rem 1.4rem 2rem;
+}
+
+.wordmark {
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.wordmark a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tag {
+  margin: 0.55rem 0 0;
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+main {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 2.2rem 1.4rem 4rem;
+}
+
+h1 {
+  font-size: 1.85rem;
+  letter-spacing: -0.03em;
+  margin: 0 0 1rem;
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin: 1.8rem 0 0.5rem;
+}
+
+p { margin: 0 0 1rem; color: var(--muted); }
+p:first-of-type { color: var(--ink); }
+
+a { color: var(--link); }
+
+.nav { margin-top: 2rem; }
+
+footer {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 0 1.4rem 2.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+header p, header p:first-of-type { color: inherit; }
