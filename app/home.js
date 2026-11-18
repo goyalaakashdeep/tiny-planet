@@ -29,8 +29,10 @@
     return { id: 'eve', sky: ['#0B1440', '#2A2478', '#5B3FA8'], stars: 1, buddy: 'ch_luna_happy', word: (h >= 1 && h < 5) ? 'Before dawn' : 'Evening' };
   }
   var tod = partOfDay();
+  // the hero is drawn like the cover poster: always the indigo night sky, with the moon friend
+  tod = { id: 'eve', sky: ['#1C1A57', '#2A2676', '#463E95'], stars: 1, buddy: 'ch_luna_happy', word: 'Evening' };
 
-  var hero = $('.hero'), scene = $('#scene'), world = $('#world'), spinner = $('#spinner'), moons = $('#moons'), bubble = $('#bubble'), hook = $('#hook'), hint = $('#hint');
+  var hero = $('.hero'), scene = $('#stage'), world = $('#world'), spinner = $('#spinner'), bubble = $('#bubble');
   var starTarget = tod.stars, starAlpha = tod.stars;
 
   function setSky(c) {
@@ -39,15 +41,14 @@
   hero.style.transition = 'background 2.2s ease';
   setSky(tod.sky);
   $('#orbiter').src = 'app/p/' + tod.buddy + '.png';
-  $('#kick').textContent = tod.word;
 
   /* ---------- layout: fit the app's points into the scene ---------- */
   var u = 1, ox = 0, oy = 0;
   function fit() {
     var w = scene.clientWidth, h = scene.clientHeight;
-    u = Math.min(w / 360, h / 470, 2.1);
+    u = Math.min(w / 400, h / 480, 2.2);
     ox = (w - 360 * u) / 2;
-    oy = h * 0.6 - 384 * u;            // planet centre sits at 60% of the scene
+    oy = h * 0.57 - 384 * u;           // planet centre a little below the middle, room for Pip on top
     world.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(' + u + ')';
   }
   fit(); addEventListener('resize', function () { fit(); size(); });
@@ -68,13 +69,11 @@
     t.style.transform = 'rotate(' + a + 'deg) translateY(-133px)';
     spinner.insertBefore(t, globe);
   });
-  spinner.insertBefore(planted('tree', -36, 'prop_tree', 0.7, true), globe);
-  spinner.insertBefore(planted('house', 40, 'prop_house', 0.8, false), globe);
   var visited = {};
   function plant(f, fresh) {
     var old = $('.planted[data-id="f-' + f + '"]', spinner);
     var stage = visited[f] ? 2 : 1; visited[f] = true;
-    var el = planted('f-' + f, F[f].patch, 'crs_' + f + '_' + stage, 0.92, false);
+    var el = planted('f-' + f, F[f].patch, 'crs_' + f + '_' + stage, 1.2, false);
     if (fresh) el.classList.add('fresh');
     if (old) old.replaceWith(el); else spinner.insertBefore(el, globe);
     return el;
@@ -83,17 +82,15 @@
   (function () { var a0 = 0.56 * 2 * Math.PI, a1 = 0.70 * 2 * Math.PI, r = 105, cx = 180, cy = 384;
     $('#shine').setAttribute('d', 'M' + (cx + r * Math.cos(a0)).toFixed(2) + ' ' + (cy + r * Math.sin(a0)).toFixed(2) + ' A' + r + ' ' + r + ' 0 0 1 ' + (cx + r * Math.cos(a1)).toFixed(2) + ' ' + (cy + r * Math.sin(a1)).toFixed(2)); })();
 
-  /* ---------- the feeling moons, on the arc above Pip ---------- */
-  ORDER.forEach(function (id, i) {
-    var a = (196 + i * 148 / 7) * Math.PI / 180, x = 180 + 150 * Math.cos(a), y = 312 + 182 * Math.sin(a) + 8;
-    var b = document.createElement('button'); b.type = 'button'; b.className = 'moon';
-    b.style.left = x + 'px'; b.style.top = (y - 31) + 'px'; b.style.transitionDelay = (i * 0.11) + 's';
-    b.setAttribute('aria-label', F[id].label);
-    b.innerHTML = '<span class="disc" style="background:' + F[id].card + '"><img src="app/p/sky_' + id + '.png" alt=""></span><span>' + F[id].label + '</span>';
-    b.addEventListener('click', function () { choose(id); });
-    moons.appendChild(b);
+  /* ---------- all eight friends live on the planet, like the cover poster ---------- */
+  // Pip's home, the tree and the eight friends, spread evenly round the planet (one every 36°)
+  var RING = ['happy', 'excited', 'okay', 'tree', 'sleepy', 'meh', 'sad', 'house', 'worried', 'cross'];
+  RING.forEach(function (id, i) {
+    var a = 18 + i * 36;
+    if (id === 'tree') spinner.insertBefore(planted('tree', a, 'prop_tree', 0.85, true), globe);
+    else if (id === 'house') spinner.insertBefore(planted('house', a, 'prop_house', 0.95, false), globe);
+    else { F[id].patch = a; var el = plant(id, false); el._sway = 'bob'; }
   });
-  setTimeout(function () { moons.classList.add('on'); }, reduce ? 0 : 500);
 
   function say(lines, small, key) {
     bubble.innerHTML = ''; var n = 0;
@@ -115,30 +112,24 @@
   var angle = 0, target = null;
   function bring(world, screen) { var t = screen - world; while (t - angle > 180) t -= 360; while (t - angle < -180) t += 360; target = t; }
 
-  /* ---------- choosing a feeling ---------- */
   var current = null, fxKind = null, hopT = -1;
-  function choose(id) {
-    if (current) return;
-    var f = F[id]; current = id;
-    moons.classList.remove('on');
-    $$('.moon').forEach(function (m) { m.style.transitionDelay = '0s'; m.tabIndex = -1; });
-    setSky(f.sky); starTarget = f.stars;
-    $('#kick').textContent = 'Today felt'; $('#big').textContent = f.label;
-    bring(f.patch, 38);
-    var wasHere = !!visited[id];
-    setTimeout(function () { var el = plant(id, true); hopT = performance.now(); fxKind = f.fx; parts = []; emit = 99; say(f.say, 'What made it ' + f.w + '?', f.key); }, reduce ? 0 : 700);
-    hint.classList.add('off');
-    $('#hookImg').src = 'app/f/' + id + '.png';
-    $('#hookTitle').textContent = wasHere ? f.name + ' came back, and brought a friend' : f.name + ' moved onto your planet';
-    $('#hookText').textContent = 'In the app, your child spins the wheel to tell Pip what made it ' + f.w + ', then slides the planet to sleep.';
-    setTimeout(function () { hook.classList.add('on'); }, reduce ? 0 : 1700);
+
+  /* ---------- Pip introduces the friends, one at a time: the planet turns each one round to Pip ---------- */
+  if (!reduce) {
+    var tour = ORDER.slice().sort(function () { return Math.random() - 0.5; }), ti = 0;
+    var meet = function () {
+      var id = tour[ti++ % tour.length], f = F[id];
+      bring(f.patch, 38);
+      setTimeout(function () {
+        var el = $('.planted[data-id="f-' + id + '"]', spinner);
+        if (el) { el.classList.remove('jig'); void el.offsetWidth; el.classList.add('jig'); }
+        hopT = performance.now();
+        say(['Meet my friend', f.name + '!'], f.name + ' is the ' + f.label.toLowerCase() + ' one.', f.name);
+      }, 1100);
+      setTimeout(function () { bubble.classList.remove('on'); }, 4600);
+    };
+    setTimeout(function () { meet(); setInterval(meet, 6500); }, 1800);
   }
-  $('#again').addEventListener('click', function () {
-    hook.classList.remove('on'); current = null; fxKind = null; bubble.classList.remove('on');
-    setSky(tod.sky); starTarget = tod.stars; $('#kick').textContent = tod.word; $('#big').textContent = 'Pick a feeling';
-    $$('.moon').forEach(function (m, i) { m.style.transitionDelay = (i * 0.11) + 's'; m.tabIndex = 0; });
-    moons.classList.add('on'); hint.classList.remove('off');
-  });
 
   /* ---------- the sky: stars, a shooting star, the feeling's weather ---------- */
   var canvas = $('#sky'), ctx = canvas.getContext('2d'), W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -213,10 +204,10 @@
     if (target !== null) { var dA = target - angle; angle += dA * Math.min(1, dt * 1.6); if (Math.abs(dA) < 0.2) { angle = target; target = null; } }
     else angle += 2 * dt;
     spinner.style.transform = 'rotate(' + angle.toFixed(2) + 'deg)';
-    $$('.planted', spinner).forEach(function (el) { if (el._sway) el.firstChild.style.transform = 'rotate(' + (Math.sin(t * 1.75 + el._ph) * 4).toFixed(2) + 'deg)'; });
+    $$('.planted', spinner).forEach(function (el) { if (el._sway === 'bob') el.firstChild.style.transform = 'translateY(' + (Math.sin(t * 1.3 + el._ph) * 1.6).toFixed(2) + 'px) rotate(' + (Math.sin(t * 0.9 + el._ph) * 3).toFixed(2) + 'deg)'; else if (el._sway) el.firstChild.style.transform = 'rotate(' + (Math.sin(t * 1.75 + el._ph) * 4).toFixed(2) + 'deg)'; });
 
     // the sun or moon friend swings round the planet (SkyOrbit)
-    var a = (t / 30 % 1) * 2 * Math.PI, sw = 0.5 - 0.5 * Math.cos(t / 23 * 2 * Math.PI), rr = 150 + 125 * sw;
+    var a = (t / 30 % 1) * 2 * Math.PI, sw = 0.5 - 0.5 * Math.cos(t / 23 * 2 * Math.PI), rr = 165 + 30 * sw;   // the app swings wider; kept close here so the moon stays clear of the words
     var orb = $('#orbiter'); orb.style.transform = 'translate(' + (180 + rr * Math.cos(a) - 24).toFixed(1) + 'px,' + (384 + rr * Math.sin(a) - 24).toFixed(1) + 'px)' + (tod.id === 'day' ? ' rotate(' + (Math.sin(t * 2) * 8).toFixed(1) + 'deg)' : '');
 
     // Pip

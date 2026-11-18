@@ -14,55 +14,45 @@
   <link rel="apple-touch-icon" href="assets/icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="app/home.css?v=8">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app/home.css?v=12">
 </head>
 <body>
   <script>document.documentElement.classList.add('js')</script>
 
   <header class="hero" id="top">
     <canvas id="sky" aria-hidden="true"></canvas>
-    <div class="wrap bar">
-      <div class="brand">
-        <img src="assets/icon.png" alt="" width="46" height="46">
-        <div><h1>Tiny Planet</h1><p>A little planet for big feelings</p></div>
+    <div class="scene poster" id="scene">
+      <div class="copy">
+        <p class="eyebrow">A feelings diary for families</p>
+        <h1 class="title">Tiny Planet</h1>
+        <p class="tag">A little planet for <b>big feelings</b></p>
       </div>
-      <a class="store" href="https://apps.apple.com/app/id6836402595">Get it free <span>on the App Store</span></a>
-    </div>
-
-    <div class="scene" id="scene">
-      <div class="apptitle" aria-live="polite"><p class="kicker" id="kick">How was today?</p><p class="big" id="big">Pick a feeling</p></div>
-      <div class="world" id="world" aria-label="Pip's planet">
-        <img class="orbiter" id="orbiter" src="app/p/ch_luna_happy.png" alt="" aria-hidden="true">
-        <div class="spinner" id="spinner" aria-hidden="true">
-          <div class="globe"></div>
-          <div class="spots"><i style="width:56px;height:30px;left:55px;top:87px"></i><i style="width:76px;height:36px;left:128px;top:142px"></i><i style="width:36px;height:18px;left:123px;top:49px"></i><i style="width:32px;height:16px;left:52px;top:170px"></i></div>
-        </div>
-        <svg class="rim" viewBox="0 0 360 760" aria-hidden="true"><circle cx="180" cy="384" r="126.5" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="2.5"/><path id="shine" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="9" stroke-linecap="round"/></svg>
-        <svg class="pip" id="pip" viewBox="0 0 76 72.2" aria-hidden="true">
-          <g id="pipInner">
-            <path d="M0 72.2 C-3.8 22.8 15.2 0 38 0 C60.8 0 79.8 22.8 76 72.2 Z" fill="#FF8A5B"/>
-            <path d="M47.5 0.76 C66.5 3.8 79.8 22.8 76 72.2 L58.9 72.2 C66.5 38 60.8 15.2 47.5 0.76 Z" fill="#F06E3E"/>
-            <g id="eyesOpen"><circle cx="27.55" cy="29.64" r="7.98" fill="#fff"/><circle id="pupilL" cx="27.55" cy="29.64" r="4.39" fill="#1E1A2E"/><circle cx="48.45" cy="29.64" r="7.98" fill="#fff"/><circle id="pupilR" cx="48.45" cy="29.64" r="4.39" fill="#1E1A2E"/></g>
-            <g id="eyesShut" stroke="#1E1A2E" stroke-width="2.66" fill="none" stroke-linecap="round" opacity="0"><path d="M20.37 29.64 Q27.55 36.82 34.73 29.64"/><path d="M41.27 29.64 Q48.45 36.82 55.63 29.64"/></g>
-            <path id="mouth" d="M31.31 45.6 Q38 52.96 44.69 45.6" stroke="#1E1A2E" stroke-width="2.66" fill="none" stroke-linecap="round"/>
-            <path d="M11.4 51.7 Q38 65 64.6 51.7" stroke="#FFD75A" stroke-width="7.6" fill="none" stroke-linecap="round"/>
-            <path id="tail" d="M60.8 53.6 Q79.8 57.4 89.3 42" stroke="#FFD75A" stroke-width="7.6" fill="none" stroke-linecap="round"/>
-          </g>
-        </svg>
-        <div class="moons" id="moons" role="group" aria-label="How did today feel?"></div>
-        <div class="pbubble" id="bubble" role="status" aria-live="polite"></div>
+      <div class="meta">
+        <ul class="chips"><li>No ads</li><li>No account</li><li>Private</li></ul>
+        <a class="store" href="https://apps.apple.com/app/id6836402595">Get it free <span>on the App Store</span></a>
       </div>
-
-
-      <p class="hint" id="hint">Tap a feeling to tell Pip<svg class="scroll-cue" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="#c9c2ff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
-
-      <div class="hook" id="hook" aria-live="polite">
-        <img id="hookImg" src="app/f/okay.png" alt="">
-        <div><h3 id="hookTitle">Puff wants to move onto your planet</h3><p id="hookText">In the app, your child spins the wheel to tell Pip what it was about, then sends the planet to sleep.</p></div>
-        <div class="acts">
-          <a class="pill" href="https://apps.apple.com/app/id6836402595"><span class="face"><img src="assets/icon.png" alt=""></span><span><b>Keep them in the app</b><small>Free on the App Store</small></span></a>
-          <button class="ghost" id="again" type="button">Try another feeling</button>
+      <div class="stage" id="stage">
+        <div class="world" id="world" aria-label="Pip's planet">
+          <div class="halo" aria-hidden="true"></div>
+          <img class="orbiter" id="orbiter" src="app/p/ch_luna_happy.png" alt="" aria-hidden="true">
+          <div class="spinner" id="spinner" aria-hidden="true">
+            <div class="globe"></div>
+            <div class="spots"><i style="width:56px;height:30px;left:55px;top:87px"></i><i style="width:76px;height:36px;left:128px;top:142px"></i><i style="width:36px;height:18px;left:123px;top:49px"></i><i style="width:32px;height:16px;left:52px;top:170px"></i></div>
+          </div>
+          <svg class="rim" viewBox="0 0 360 760" aria-hidden="true"><circle cx="180" cy="384" r="126.5" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="2.5"/><path id="shine" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="9" stroke-linecap="round"/></svg>
+          <svg class="pip" id="pip" viewBox="0 0 76 72.2" aria-hidden="true">
+            <g id="pipInner">
+              <path d="M0 72.2 C-3.8 22.8 15.2 0 38 0 C60.8 0 79.8 22.8 76 72.2 Z" fill="#FF8A5B"/>
+              <path d="M47.5 0.76 C66.5 3.8 79.8 22.8 76 72.2 L58.9 72.2 C66.5 38 60.8 15.2 47.5 0.76 Z" fill="#F06E3E"/>
+              <g id="eyesOpen"><circle cx="27.55" cy="29.64" r="7.98" fill="#fff"/><circle id="pupilL" cx="27.55" cy="29.64" r="4.39" fill="#1E1A2E"/><circle cx="48.45" cy="29.64" r="7.98" fill="#fff"/><circle id="pupilR" cx="48.45" cy="29.64" r="4.39" fill="#1E1A2E"/></g>
+              <g id="eyesShut" stroke="#1E1A2E" stroke-width="2.66" fill="none" stroke-linecap="round" opacity="0"><path d="M20.37 29.64 Q27.55 36.82 34.73 29.64"/><path d="M41.27 29.64 Q48.45 36.82 55.63 29.64"/></g>
+              <path id="mouth" d="M31.31 45.6 Q38 52.96 44.69 45.6" stroke="#1E1A2E" stroke-width="2.66" fill="none" stroke-linecap="round"/>
+              <path d="M11.4 51.7 Q38 65 64.6 51.7" stroke="#FFD75A" stroke-width="7.6" fill="none" stroke-linecap="round"/>
+              <path id="tail" d="M60.8 53.6 Q79.8 57.4 89.3 42" stroke="#FFD75A" stroke-width="7.6" fill="none" stroke-linecap="round"/>
+            </g>
+          </svg>
+          <div class="pbubble" id="bubble" role="status" aria-live="polite"></div>
         </div>
       </div>
     </div>
@@ -168,6 +158,12 @@
         <p>I built Tiny Planet because "How was your day?" so often gets "fine". A child might not have the word yet, but they can always point to a friend.</p>
         <p>I'm an independent developer, and I designed and built it on my own.</p>
         <p class="sig">Aakash</p>
+        <dl class="facts">
+          <div><dt>For</dt><dd>iPhone, iOS 17 or later</dd></div>
+          <div><dt>Ages</dt><dd>4+</dd></div>
+          <div><dt>Price</dt><dd>Free, with an optional Family plan</dd></div>
+          <div><dt>Privacy</dt><dd>Data Not Collected</dd></div>
+        </dl>
         <a class="pill" href="https://apps.apple.com/app/id6836402595"><span class="face"><img src="assets/icon.png" alt=""></span><span><b>Get Tiny Planet</b><small>Free on the App Store</small></span></a>
       </div>
     </section>
@@ -201,6 +197,6 @@
 
   <div class="dock" id="dock"><a class="pill" href="https://apps.apple.com/app/id6836402595"><span class="face"><img src="assets/icon.png" alt=""></span><span><b>Get Tiny Planet</b><small>Free on the App Store</small></span></a></div>
 
-  <script src="app/home.js?v=8"></script>
+  <script src="app/home.js?v=12"></script>
 </body>
 </html>

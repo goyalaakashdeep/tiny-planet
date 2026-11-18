@@ -301,3 +301,67 @@ footer.groundbar { padding-bottom: 0; }
 .pbubble small { color: rgba(255,255,255,0.85); font-size: 11.5px; margin-top: 3px; }
 .pbubble.on { animation: bob 2.2s ease-in-out infinite; }
 @keyframes bob { 0%,100% { translate: 0 -2px; } 50% { translate: 0 2px; } }
+
+/* calmer hero: the feelings sit in one quiet tray under the planet */
+.tray { position: absolute; z-index: 4; left: 50%; bottom: 96px; transform: translateX(-50%); display: flex; gap: 6px; padding: 8px 10px;
+  border-radius: 999px; background: rgba(255,255,255,.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 8px 30px rgba(20,14,60,.12);
+  opacity: 0; transition: opacity .6s, transform .6s; pointer-events: none; }
+.tray.on { opacity: 1; pointer-events: auto; transform: translateX(-50%); }
+.tray .moon { position: static; width: 46px; height: 46px; margin: 0; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.55);
+  opacity: 1; transform: none; transition: transform .25s ease, background .25s; }
+.tray .moon img { width: 36px; height: 36px; }
+.tray .moon:hover, .tray .moon:focus-visible { transform: translateY(-4px); background: #fff; }
+.tray .moon:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+.hint { bottom: 26px; color: #fff; opacity: .92; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; width: 100%; margin-top: 4px; }
+.facts div { background: rgba(255,255,255,.07); border-radius: 18px; padding: 12px 14px; }
+.facts dt { color: var(--lav); font-weight: 800; font-size: 13px; }
+.facts dd { margin: 2px 0 0; color: var(--cream); font-weight: 800; font-size: 15px; }
+@media (max-width: 420px) { .tray { gap: 2px; padding: 6px; bottom: 90px; } .tray .moon { width: 38px; height: 38px; } .tray .moon img { width: 30px; height: 30px; } }
+@media (prefers-reduced-motion: reduce) { .tray, .tray .moon { transition: none; } }
+
+/* ================= the hero, laid out like the cover poster ================= */
+.poster { --wordmark: "Poppins", var(--round);
+  height: auto; min-height: 100svh; max-width: 1240px; margin: 0 auto; display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "copy" "stage" "meta"; grid-template-rows: auto minmax(0, 1fr) auto; justify-items: stretch;
+  padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); padding-block: 32px; }
+.poster .copy { grid-area: copy; display: grid; gap: 14px; justify-items: center; text-align: center; min-width: 0; }
+.poster .eyebrow { font-family: var(--wordmark); font-weight: 600; font-size: clamp(12px, 1.1vw, 15px); letter-spacing: .3em; text-transform: uppercase; color: #fff; opacity: .75; }
+.poster .title { font-family: var(--wordmark); font-weight: 700; font-size: clamp(58px, 6.6vw, 104px); line-height: .98; letter-spacing: -.02em; margin: 0; white-space: nowrap; }
+.poster .tag { font-family: var(--wordmark); font-weight: 600; font-size: clamp(21px, 2.3vw, 32px); line-height: 1.2; text-wrap: balance; }
+.poster .tag b { color: #FFCE4A; font-weight: 600; }
+.meta { grid-area: meta; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: center; min-width: 0; }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.chips li { font-family: var(--wordmark); font-weight: 600; font-size: 16px; padding: 9px 20px; border-radius: 999px; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.26); }
+.poster .store { font-size: 16px; padding: 12px 22px; }
+.stage { grid-area: stage; position: relative; min-width: 0; min-height: 420px; }
+.halo { position: absolute; left: 4px; top: 208px; width: 352px; height: 352px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(150,170,255,.2) 0, rgba(150,170,255,.13) 62%, rgba(150,170,255,0) 71%); }
+.play { grid-area: play; display: grid; gap: 14px; margin-top: 44px; min-width: 0; justify-items: start; }
+.prompt { display: grid; gap: 12px; justify-items: start; }
+.prompt .big { font-family: var(--round); font-weight: 900; font-size: 20px; line-height: 1.2; color: #fff; }
+.play .tray { position: static; transform: none; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.14); box-shadow: none; }
+.play .tray.on { transform: none; }
+.play .tray .moon:hover, .play .tray .moon:focus-visible { transform: translateY(-4px) scale(1.06); }
+.play .hint { position: static; text-align: left; font-size: 15px; color: var(--lav); opacity: 1; }
+.play .hint .scroll-cue { display: none; }
+.play.chosen .tray, .play.chosen .hint { display: none; }
+.play .hook { position: relative; left: auto; bottom: auto; width: 100%; max-width: 540px; opacity: 1; transform: none; pointer-events: auto;
+  background: rgba(21,18,56,.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.play .hook:not(.on) { display: none; }
+.play .hook.on { animation: hookin .6s cubic-bezier(.2,.9,.2,1); }
+@keyframes hookin { from { opacity: 0; transform: translateY(16px); } }
+.apptitle { display: none; }
+@media (max-width: 860px) {
+  .poster { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "stage" "meta"; grid-template-rows: auto auto auto;
+    padding-block: max(28px, env(safe-area-inset-top, 0px)) 44px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .poster .copy, .prompt, .play { justify-items: center; text-align: center; }
+  .poster .title { white-space: normal; font-size: clamp(64px, 21vw, 110px); }
+  .poster .tag { max-width: 13em; }
+  .stage { height: min(108vw, 60svh); min-height: 360px; }
+  .meta { justify-content: center; margin-top: 4px; }
+  .play { margin-top: 36px; }
+  .play .hint { text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) { .play .hook.on { animation: none; } }
