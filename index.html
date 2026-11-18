@@ -2,62 +2,243 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tiny Planet — support</title>
-  <meta name="description" content="Support and privacy for Tiny Planet: Kids Feelings, a feelings diary for families.">
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tiny Planet: Kids Feelings</title>
+  <meta name="description" content="Try Tiny Planet in your browser: tell Pip how today felt, spin the wheel, and send the planet to sleep. A feelings diary for young children, coming to iPhone on 9 December 2026.">
+  <meta property="og:title" content="Tiny Planet: Kids Feelings">
+  <meta property="og:description" content="A little planet for big feelings. Try it in your browser. Coming to iPhone on 9 December 2026.">
+  <meta property="og:image" content="https://goyalaakashdeep.github.io/tiny-planet/press/img/header.jpg">
+  <meta name="theme-color" content="#2b2668">
+  <link rel="icon" href="assets/icon.png">
+  <link rel="apple-touch-icon" href="assets/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app/app.css">
 </head>
-<body>
-  <header>
-    <p class="wordmark">Tiny Planet</p>
-    <p class="tag">A little planet for big feelings.</p>
-  </header>
+<body data-scene="cover">
 
-  <main>
-    <h1>Support</h1>
-    <p>
-      Tiny Planet lives on your iPhone. There is no account to sign into and no website to log in to.
-      Your child's check-ins, notes and voice recordings stay on the device.
-    </p>
-    <p>
-      I'm Aakashdeep, and I make Tiny Planet on my own. If something feels off, or you have an idea,
-      email me at <a href="mailto:goyalaakashdeep@gmail.com">goyalaakashdeep@gmail.com</a>.
-      Please mention your iOS version and what you tapped last. I read every message.
-    </p>
+  <h1 class="sr">Tiny Planet: Kids Feelings, a feelings diary for young children and their grown-ups. This page is a small playable version of the iPhone app, coming on 9 December 2026.</h1>
 
-    <h2>The bedtime reminder never arrives</h2>
-    <p>
-      Reminders are local notifications. Check Settings → Notifications → Tiny Planet,
-      and that a Focus mode is not silencing them. The reminder time is in Parents → Settings.
-    </p>
+  <div id="world">
+    <canvas id="sky" aria-hidden="true"></canvas>
 
-    <h2>Pip can't hear my child</h2>
-    <p>
-      Voice notes need the microphone. Turn it on in Settings → Privacy &amp; Security → Microphone → Tiny Planet.
-    </p>
+    <div class="planet-wrap" id="planetWrap">
+      <svg viewBox="0 0 520 520" aria-hidden="true">
+        <defs>
+          <radialGradient id="pg" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#9aeccb"/><stop offset="0.55" stop-color="#5fcfa4"/><stop offset="1" stop-color="#2f8f78"/></radialGradient>
+          <radialGradient id="shade" cx="30%" cy="26%" r="82%"><stop offset="0.55" stop-color="#0f2b3a" stop-opacity="0"/><stop offset="1" stop-color="#0f2b3a" stop-opacity="0.4"/></radialGradient>
+          <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0.7" stop-color="#fff" stop-opacity="0.18"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+          <clipPath id="ball"><circle cx="260" cy="300" r="190"/></clipPath>
+        </defs>
+        <circle cx="260" cy="300" r="250" fill="url(#halo)"/>
+        <g id="pipBody">
+          <path d="M196 140 V40 a64 64 0 0 1 128 0 V140 Z" fill="#ff8a5b"/>
+          <path d="M292 -12 a64 64 0 0 1 32 52 V140 H300 V48 a64 64 0 0 0 -8 -60 Z" fill="#e86f45" opacity="0.7"/>
+          <g id="pipEyes">
+            <circle cx="242" cy="28" r="14" fill="#fff"/><circle id="pupilL" cx="244" cy="30" r="7.5" fill="#1d1a3a"/>
+            <circle cx="282" cy="28" r="14" fill="#fff"/><circle id="pupilR" cx="284" cy="30" r="7.5" fill="#1d1a3a"/>
+          </g>
+          <g id="pipSleep" stroke="#1d1a3a" stroke-width="5" fill="none" stroke-linecap="round"><path d="M230 30 q12 9 24 0"/><path d="M270 30 q12 9 24 0"/></g>
+          <g id="blush" fill="#ff5f7e"><ellipse cx="226" cy="50" rx="10" ry="6"/><ellipse cx="298" cy="50" rx="10" ry="6"/></g>
+          <path id="mouth" d="M248 56 q14 12 28 0" stroke="#1d1a3a" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path id="scarf" d="M190 80 q70 26 140 -2 q20 -8 30 -26" stroke="#ffd45c" stroke-width="16" fill="none" stroke-linecap="round"/>
+          <g id="pipCap"><path d="M196 4 q64 -74 132 -6 q-58 -16 -132 6 z" fill="#6b4fe0"/><path d="M262 -40 q50 -22 80 10" stroke="#6b4fe0" stroke-width="18" fill="none" stroke-linecap="round"/><circle cx="346" cy="-26" r="12" fill="#fff"/></g>
+        </g>
+        <circle cx="260" cy="300" r="190" fill="url(#pg)"/>
+        <g clip-path="url(#ball)" fill="#2f8f78">
+          <g id="spots">
+            <ellipse cx="300" cy="220" rx="40" ry="24" opacity="0.35"/><ellipse cx="196" cy="310" rx="58" ry="32" opacity="0.32"/>
+            <ellipse cx="318" cy="384" rx="72" ry="36" opacity="0.3"/><ellipse cx="140" cy="410" rx="34" ry="18" opacity="0.28"/>
+            <ellipse cx="410" cy="290" rx="30" ry="16" opacity="0.3"/>
+            <ellipse cx="680" cy="220" rx="40" ry="24" opacity="0.35"/><ellipse cx="576" cy="310" rx="58" ry="32" opacity="0.32"/>
+            <ellipse cx="698" cy="384" rx="72" ry="36" opacity="0.3"/><ellipse cx="520" cy="410" rx="34" ry="18" opacity="0.28"/>
+            <ellipse cx="790" cy="290" rx="30" ry="16" opacity="0.3"/>
+          </g>
+        </g>
+        <circle cx="260" cy="300" r="190" fill="url(#shade)"/>
+        <path d="M128 250 a145 145 0 0 1 84 -100" stroke="#fff" stroke-opacity="0.22" stroke-width="14" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div id="visitors"></div>
+      <div class="picker" id="picker" role="group" aria-label="Pick a feeling"></div>
+    </div>
 
-    <h2>I forgot the grown-up PIN</h2>
-    <p>
-      Tap "Forgot PIN?" on the PIN screen, then confirm with your phone's passcode or Face ID to set a new one.
-    </p>
+    <div class="bubble" id="bubble" role="status" aria-live="polite">Hi! I'm Pip.<small>Tell me about today?</small></div>
+    <p class="ask" id="ask" aria-hidden="true"></p>
 
-    <h2>Moving to a new phone</h2>
-    <p>
-      In Parents → Settings, "Save a copy" makes a backup file you keep.
-      On the new phone, "Bring a copy back" restores it.
-    </p>
+    <div class="wheel" id="wheel">
+      <div class="arc"></div>
+      <div class="items" id="items" role="listbox" aria-label="What was it about?"></div>
+      <button class="nav prev" id="prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="nav next" id="next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <p class="hint">Spin the wheel, then tap the middle one</p>
+    </div>
 
-    <h2>Tiny Planet Family</h2>
-    <p>
-      Subscriptions are handled by Apple. To cancel or change one, open Settings → your name → Subscriptions.
-      If a purchase doesn't show up, use "Restore purchases" in Parents → Settings.
-    </p>
+    <div class="star-zone" id="starZone">
+      <button class="star-btn" id="starBtn" aria-label="Hold the star to tell Pip more">
+        <svg class="ring" viewBox="0 0 112 112"><circle cx="56" cy="56" r="52" stroke="rgba(255,255,255,0.15)" stroke-width="5" fill="none"/><circle id="ringFill" cx="56" cy="56" r="52" stroke="#ffc23d" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327"/></svg>
+        <svg class="st" viewBox="0 0 64 64"><path d="M32 4l8.2 17 18.8 2.5-13.7 13 3.4 18.6L32 46.2 15.3 55.1l3.4-18.6L5 23.5 23.8 21z" fill="#ffc23d" stroke="#e9a21b" stroke-width="2" stroke-linejoin="round"/><circle cx="25" cy="31" r="2.6" fill="#1d1a3a"/><circle cx="39" cy="31" r="2.6" fill="#1d1a3a"/><path d="M27 38q5 4 10 0" stroke="#1d1a3a" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>
+      </button>
+      <p>Hold the star to tell Pip more</p>
+      <small>In the app, this records a short voice note. Here it just listens for a moment.</small>
+      <button class="text-btn" id="skipStar">Skip</button>
+    </div>
 
-    <p class="nav"><a href="privacy.html">Privacy policy</a></p>
-  </main>
+    <header class="top">
+      <div>
+        <div class="kicker" id="kicker">Your planet</div>
+        <p class="title" id="title">Tiny Planet</p>
+        <a class="soon" href="#corner" id="soonLink">Coming to iPhone on 9 December</a>
+      </div>
+      <button class="round-btn" id="cornerBtn" aria-label="Open the grown-up corner"><i><svg viewBox="0 0 24 24"><rect x="4" y="11" width="4" height="9" rx="2" fill="#fff"/><rect x="10" y="6" width="4" height="14" rx="2" fill="#fff"/><rect x="16" y="9" width="4" height="11" rx="2" fill="#fff"/></svg></i>My corner</button>
+    </header>
 
-  <footer>
-    <p>© 2026 Aakashdeep Goyal</p>
-  </footer>
+    <nav class="bottom" aria-label="Planet">
+      <button class="round-btn" id="stickersBtn"><i><svg viewBox="0 0 24 24"><path d="M6 3h10a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6z" fill="#fff"/><path d="M6 3v18" stroke="#2b2668" stroke-width="2"/></svg></i>Stickers</button>
+      <div class="main" id="main"></div>
+      <button class="round-btn" id="calmBtn"><i><svg viewBox="0 0 24 24"><path d="M3 9h11a3 3 0 1 0-3-3M3 14h15a3 3 0 1 1-3 3M3 19h6" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></i>Calm</button>
+    </nav>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <section class="cover" id="cover" aria-label="Welcome">
+      <div>
+        <div class="kicker"><img src="assets/icon.png" alt="" width="22" height="22" style="border-radius:6px">A feelings diary for families</div>
+        <p class="cover-title" aria-hidden="true">Tiny Planet</p>
+        <p class="cover-sub">A little planet for <em>big feelings</em>. Try it right here, the way a child would.</p>
+      </div>
+      <div></div>
+      <div class="foot">
+        <div class="slider" id="beginSlider" role="slider" aria-label="Slide to begin" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+          <div class="fill"></div><div class="label">Slide to begin</div>
+          <span class="knob" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+        <button class="skip" id="skipToCorner">Grown-ups and press: skip to the details</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="sheet" id="stickersSheet" role="dialog" aria-modal="true" aria-labelledby="stkTitle">
+    <div class="scrim" data-close></div>
+    <div class="card">
+      <div class="sheet-head"><div><div class="kicker">Your collection</div><h2 id="stkTitle">Sticker book</h2></div><button class="close" data-close aria-label="Close"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>
+      <div class="stickers" id="stickers"></div>
+      <p class="sheet-note">Every feeling brings a new friend to the planet. Tell Pip about today to meet one.</p>
+    </div>
+  </div>
+
+  <div class="sheet" id="calmSheet" role="dialog" aria-modal="true" aria-labelledby="calmTitle">
+    <div class="scrim" data-close></div>
+    <div class="card">
+      <div class="sheet-head"><div><div class="kicker">The calm corner</div><h2 id="calmTitle">Big breaths</h2></div><button class="close" data-close aria-label="Close"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>
+      <div class="calm">
+        <div class="orb" id="orb"><img src="app/f/okay.png" alt=""></div>
+        <p class="say" id="breathSay" aria-live="polite">Ready?</p>
+        <button class="btn" id="breathBtn">Breathe with Puff</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sheet" id="cornerSheet" role="dialog" aria-modal="true" aria-labelledby="cornerTitle">
+    <div class="scrim" data-close></div>
+    <div class="card">
+      <div class="sheet-head"><div><div class="kicker">Grown-ups only</div><h2 id="cornerTitle">My corner</h2></div><button class="close" data-close aria-label="Close"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>
+
+      <div class="pin" id="pin">
+        <p>In the app, this corner is locked with a grown-up PIN or Face ID.<br>Here, tap any 4 numbers to peek inside.</p>
+        <div class="dots" id="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="keys" id="keys"></div>
+        <button class="text-btn" id="pinSkip">Just open it</button>
+      </div>
+
+      <div id="corner" hidden>
+        <div class="tabs" role="tablist" aria-label="Corner">
+          <button role="tab" aria-selected="true" data-pane="week">Week</button>
+          <button role="tab" aria-selected="false" data-pane="about">About</button>
+          <button role="tab" aria-selected="false" data-pane="family">Family</button>
+          <button role="tab" aria-selected="false" data-pane="privacy">Privacy</button>
+          <button role="tab" aria-selected="false" data-pane="press">Press</button>
+          <button role="tab" aria-selected="false" data-pane="help">Help</button>
+        </div>
+
+        <section class="pane on" id="pane-week" role="tabpanel">
+          <div class="box">
+            <h3 id="weekTitle">This week</h3>
+            <div class="week" id="week"></div>
+          </div>
+          <div class="box">
+            <p class="quiet" style="margin:0 0 6px;font-weight:800">Pip noticed something</p>
+            <p style="margin:0">After a few more nights, Pip starts spotting patterns, like which days tend to feel heavy, and turns them into one gentle question.</p>
+          </div>
+          <div class="ask-card"><small>Ask yourself tonight</small>"What's something you're proud of today?"</div>
+        </section>
+
+        <section class="pane" id="pane-about" role="tabpanel">
+          <h3>Why I made Tiny Planet</h3>
+          <p>I built it because "How was your day?" so often gets "fine". A child might not have the word yet, but they can always point to a friend.</p>
+          <p>Each day your child tells Pip how it felt by picking one of eight little friends, then spins a wheel to say what it was about. They can hold the star to record a short voice note. At bedtime they slide the planet to sleep and blow Pip a goodnight kiss. A sticker book and a calm breathing corner round it out.</p>
+          <p>Behind the grown-up lock, you see the week at a glance, Pip suggests one question to ask, and each month becomes a postcard you can keep or send to the grandparents.</p>
+          <p>I'm an independent developer, and I designed and built Tiny Planet on my own.</p>
+          <p class="sig">Aakashdeep</p>
+          <p class="quiet">Prefer reading it as a page? <a href="about.html">See the full tour</a>.</p>
+        </section>
+
+        <section class="pane" id="pane-family" role="tabpanel">
+          <h3>Tiny Planet Family</h3>
+          <p class="quiet">The child's side is always free. Family is an optional subscription for the grown-up side, and you can share it through Family Sharing.</p>
+          <div class="prices">
+            <div class="price"><b>$29.99</b><span>a year, with a 1-week free trial</span></div>
+            <div class="price"><b>$4.99</b><span>a month</span></div>
+          </div>
+          <p class="quiet" style="font-size:14px">₹2,999 a year or ₹499 a month in India. Prices vary by country.</p>
+          <ul class="list">
+            <li><img src="app/f/worried.png" alt=""><div><b>Every pattern Pip notices</b><span>With a gentle question for each one.</span></div></li>
+            <li><img src="app/f/sleepy.png" alt=""><div><b>Hear the voice notes</b><span>Play back what your child told Pip.</span></div></li>
+            <li><img src="app/f/happy.png" alt=""><div><b>The monthly look back and postcard</b><span>A month of feelings, kept.</span></div></li>
+            <li><img src="app/f/okay.png" alt=""><div><b>Up to 4 children</b><span>A planet for each of them.</span></div></li>
+          </ul>
+        </section>
+
+        <section class="pane" id="pane-privacy" role="tabpanel">
+          <h3>Private by design</h3>
+          <ul class="list">
+            <li><img src="app/f/happy.png" alt=""><div><b>No accounts</b><span>Nothing to sign up for. Open it and start.</span></div></li>
+            <li><img src="app/f/okay.png" alt=""><div><b>Nothing leaves the phone</b><span>Check-ins, notes and voice recordings stay on your iPhone. No servers, no analytics.</span></div></li>
+            <li><img src="app/f/excited.png" alt=""><div><b>No ads, ever</b><span>A child's space should feel safe and quiet.</span></div></li>
+            <li><img src="app/f/sleepy.png" alt=""><div><b>A grown-up lock</b><span>This corner and every purchase sit behind a PIN or Face ID.</span></div></li>
+          </ul>
+          <p class="quiet" style="margin-top:14px">App Store privacy label: Data Not Collected. <a href="privacy.html">Read the privacy policy</a>.</p>
+        </section>
+
+        <section class="pane" id="pane-press" role="tabpanel">
+          <h3>For press</h3>
+          <table class="facts">
+            <tr><th>App</th><td>Tiny Planet: Kids Feelings</td></tr>
+            <tr><th>Developer</th><td>Aakashdeep Goyal, independent developer</td></tr>
+            <tr><th>Platform</th><td>iPhone, iOS 17 or later</td></tr>
+            <tr><th>Release</th><td>9 December 2026, App Store, 175 countries and regions</td></tr>
+            <tr><th>Price</th><td>Free, with the optional Tiny Planet Family subscription</td></tr>
+            <tr><th>Age rating</th><td>4+</td></tr>
+            <tr><th>Categories</th><td>Education, Health &amp; Fitness</td></tr>
+          </table>
+          <a class="cta" href="press/">Open the press kit</a>
+          <p class="quiet" style="margin-top:14px">Screenshots, clips, artwork and the app icon. Email <a href="mailto:goyalaakashdeep@gmail.com">goyalaakashdeep@gmail.com</a>.</p>
+        </section>
+
+        <section class="pane faq" id="pane-help" role="tabpanel">
+          <h3>Help</h3>
+          <details><summary>The bedtime reminder never arrives</summary><p>Reminders are local notifications. Check Settings → Notifications → Tiny Planet, and that a Focus mode isn't silencing them. The reminder time is in Parents → Settings.</p></details>
+          <details><summary>Pip can't hear my child</summary><p>Voice notes need the microphone. Turn it on in Settings → Privacy &amp; Security → Microphone → Tiny Planet.</p></details>
+          <details><summary>I forgot the grown-up PIN</summary><p>Tap "Forgot PIN?" on the PIN screen, then confirm with your phone's passcode or Face ID to set a new one.</p></details>
+          <details><summary>Moving to a new phone</summary><p>In Parents → Settings, "Save a copy" makes a backup file you keep. On the new phone, "Bring a copy back" restores it.</p></details>
+          <details><summary>Cancelling or restoring Tiny Planet Family</summary><p>Subscriptions are handled by Apple. To cancel or change one, open Settings → your name → Subscriptions. If a purchase doesn't show up, use "Restore purchases" in Parents → Settings.</p></details>
+          <p class="quiet" style="margin-top:12px">Something else? Email me at <a href="mailto:goyalaakashdeep@gmail.com">goyalaakashdeep@gmail.com</a> and mention your iOS version. I read every message. See also the <a href="support.html">support page</a> and <a href="privacy.html">privacy policy</a>.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <noscript><p style="position:fixed;left:0;right:0;bottom:0;background:#fff;color:#1e1a2e;padding:16px;margin:0">Tiny Planet works best with JavaScript on. You can read about it on the <a href="about.html">tour page</a>.</p></noscript>
+  <script src="app/app.js"></script>
 </body>
 </html>
