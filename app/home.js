@@ -26,23 +26,28 @@
     bubble.classList.remove('pop'); void bubble.offsetWidth; bubble.classList.add('pop');
   }
 
-  /* friends around the planet */
+  /* the friends live on the planet, standing on its surface like in the app */
+  var RIM = [-42, 42, -78, 78, -114, 114, -150, 150];   // degrees from the top, Pip stands at 0
   FEEL.forEach(function (f, i) {
-    var ang = -150 + i * (300 / 7), rad = ang * Math.PI / 180;
+    var ang = RIM[i], rad = ang * Math.PI / 180;
+    var cx = 50 + Math.sin(rad) * 36.2, cy = 57.7 - Math.cos(rad) * 36.2;   // on the rim of the planet
     var b = document.createElement('button'); b.type = 'button'; b.className = 'pick';
-    b.style.left = (50 + Math.sin(rad) * 47) + '%'; b.style.top = (54 - Math.cos(rad) * 44) + '%';
-    b.setAttribute('aria-label', f.label);
-    var im = document.createElement('img'); im.src = 'app/f/obj_' + f.id + '.png'; im.alt = '';
-    var sp = document.createElement('span'); sp.textContent = f.label;
-    b.appendChild(im); b.appendChild(sp);
+    b.style.left = cx + '%'; b.style.top = cy + '%'; b.style.setProperty('--r', ang + 'deg');
+    b.setAttribute('aria-label', f.label + ', ' + f.name);
+    var im = document.createElement('img'); im.src = 'app/f/' + f.id + '.png'; im.alt = '';
+    b.appendChild(im);
     b.addEventListener('click', function () { choose(f, b); });
     friends.appendChild(b);
+    var lab = document.createElement('span'); lab.className = 'name'; lab.textContent = f.label; lab.setAttribute('aria-hidden', 'true');
+    var lr = 36.2 + 19;
+    lab.style.left = (50 + Math.sin(rad) * lr) + '%'; lab.style.top = (57.7 - Math.cos(rad) * lr) + '%';
+    friends.appendChild(lab); b._label = lab;
   });
 
   var fx = null;
   function choose(f, b) {
     if (friends.classList.contains('done')) return;
-    friends.classList.add('done'); b.classList.add('chosen');
+    friends.classList.add('done'); b.classList.add('chosen'); b._label.classList.add('chosen');
     sky('#3a76b8', '#86c3dc', rgba(f.c, 0.45));
     fx = f.fx; parts = []; emit = 99;
     var p = $('#planetWrap'); if (!reduce) { p.classList.remove('hop'); void p.offsetWidth; p.classList.add('hop'); }
@@ -55,7 +60,7 @@
   }
   $('#again').addEventListener('click', function () {
     hook.classList.remove('on'); friends.classList.remove('done');
-    $$('.pick').forEach(function (b) { b.classList.remove('chosen'); });
+    $$('.pick, .name').forEach(function (b) { b.classList.remove('chosen'); });
     fx = null; sky('#241f5e', '#5b4fd0'); say('Hi again!', 'How did today feel?'); hint.classList.remove('off');
   });
 
@@ -131,7 +136,7 @@
     if (now > blinkAt) { eyes.style.transformOrigin = '262px 28px'; eyes.style.transform = 'scaleY(0.1)'; setTimeout(function () { eyes.style.transform = ''; }, 130); blinkAt = now + 2500 + Math.random() * 4000; }
     var f1 = Math.sin(t * 3.2) * 7, f2 = Math.sin(t * 3.2 + 1.2) * 10;
     scarf.setAttribute('d', 'M190 80 q70 26 140 -2 q' + (20 + f1 * 0.4).toFixed(1) + ' ' + (-8 + f1).toFixed(1) + ' ' + (30 + f2 * 0.3).toFixed(1) + ' ' + (-26 + f2).toFixed(1));
-    $$('.pick img').forEach(function (im, j) { im.style.transform = 'translateY(' + (Math.sin(t * 1.4 + j) * 5).toFixed(1) + 'px) rotate(' + (Math.sin(t + j) * 4).toFixed(1) + 'deg)'; });
+    $$('.pick img').forEach(function (im, j) { im.style.transform = 'rotate(' + (Math.sin(t * 1.3 + j * 1.7) * 5).toFixed(1) + 'deg) scaleY(' + (1 + Math.sin(t * 2.2 + j) * 0.025).toFixed(3) + ')'; });
     raf = requestAnimationFrame(frame);
   }
   if (!reduce) {

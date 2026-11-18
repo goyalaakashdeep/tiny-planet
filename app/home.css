@@ -189,3 +189,20 @@ footer nav { display: flex; gap: 18px; }
 }
 html, body { overflow-x: clip; }
 .ground { padding-bottom: clamp(150px, 16vw, 200px) !important; } .ground::after { bottom: -1215px; }
+
+/* friends standing on the planet */
+.friends { inset: 0 !important; }
+.pick { width: 15%; transform: translate(-50%, -88%) rotate(var(--r)); transform-origin: 50% 88%; filter: drop-shadow(0 6px 8px rgba(10,6,40,0.3)); }
+.pick img { transform-origin: 50% 96%; }
+.pick:hover { transform: translate(-50%, -88%) rotate(var(--r)) scale(1.1); }
+.friends.done .pick { opacity: 0.55; transform: translate(-50%, -88%) rotate(var(--r)) scale(0.92); pointer-events: none; filter: saturate(0.6) drop-shadow(0 6px 8px rgba(10,6,40,0.3)); }
+.friends.done .pick.chosen { opacity: 1; transform: translate(-50%, -88%) rotate(var(--r)) scale(1.28); filter: drop-shadow(0 0 18px rgba(255,255,255,0.45)); }
+.friends .name { position: absolute; transform: translate(-50%, -50%); font-weight: 900; font-size: 14px; white-space: nowrap; text-shadow: 0 1px 8px rgba(0,0,0,0.4); pointer-events: none; transition: opacity .4s; }
+.friends.done .name { opacity: 0; }
+.friends.done .name.chosen { opacity: 1; }
+.pick span { display: none; }
+@media (max-width: 520px) { .friends .name { font-size: 12px; } }
+.pick { width: 17.5%; transform: translate(-50%, -93%) rotate(var(--r)); transform-origin: 50% 93%; }
+.pick:hover { transform: translate(-50%, -93%) rotate(var(--r)) scale(1.1); }
+.friends.done .pick { transform: translate(-50%, -93%) rotate(var(--r)) scale(0.92); }
+.friends.done .pick.chosen { transform: translate(-50%, -93%) rotate(var(--r)) scale(1.28); }
