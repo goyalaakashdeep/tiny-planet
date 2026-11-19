@@ -100,7 +100,7 @@
         var w = document.createElement('span'); w.className = 'w'; w.textContent = word;
         if (key && key.split(' ').some(function (k) { return word.toLowerCase().indexOf(k.toLowerCase()) === 0; }) && line.toLowerCase().indexOf(key.split(' ')[0].toLowerCase()) >= 0) w.classList.add('key');
         ln.appendChild(w); if (i < line.split(' ').length - 1) ln.appendChild(document.createTextNode(' '));
-        (function (el, d) { setTimeout(function () { el.classList.add('in'); }, reduce ? 0 : 150 + d * 90); })(w, n++);
+        (function (el, d) { setTimeout(function () { el.classList.add('in'); }, reduce ? 0 : 200 + d * 140); })(w, n++);
       });
       bubble.appendChild(ln);
     });
@@ -109,7 +109,7 @@
   }
 
   /* ---------- the planet turns, like PlanetSpin ---------- */
-  var angle = 0, target = null;
+  var angle = 0, target = null, vel = 1.2, glide = null;   // vel in degrees a second
   function bring(world, screen) { var t = screen - world; while (t - angle > 180) t -= 360; while (t - angle < -180) t += 360; target = t; }
 
   var current = null, fxKind = null, hopT = -1;
@@ -125,10 +125,10 @@
         if (el) { el.classList.remove('jig'); void el.offsetWidth; el.classList.add('jig'); }
         hopT = performance.now();
         say(['Meet my friend', f.name + '!'], f.name + ' is the ' + f.label.toLowerCase() + ' one.', f.name);
-      }, 1100);
-      setTimeout(function () { bubble.classList.remove('on'); }, 4600);
+      }, 1900);
+      setTimeout(function () { bubble.classList.remove('on'); }, 6600);
     };
-    setTimeout(function () { meet(); setInterval(meet, 6500); }, 1800);
+    setTimeout(function () { meet(); setInterval(meet, 9000); }, 2200);
   }
 
   /* ---------- the sky: stars, a shooting star, the feeling's weather ---------- */
@@ -201,27 +201,33 @@
     parts = parts.filter(function (p) { return draw(p, dt); });
 
     // planet: idle drift of 2° a second, or ease to a target (PlanetSpin)
-    if (target !== null) { var dA = target - angle; angle += dA * Math.min(1, dt * 1.6); if (Math.abs(dA) < 0.2) { angle = target; target = null; } }
-    else angle += 2 * dt;
-    spinner.style.transform = 'rotate(' + angle.toFixed(2) + 'deg)';
-    $$('.planted', spinner).forEach(function (el) { if (el._sway === 'bob') el.firstChild.style.transform = 'translateY(' + (Math.sin(t * 1.3 + el._ph) * 1.6).toFixed(2) + 'px) rotate(' + (Math.sin(t * 0.9 + el._ph) * 3).toFixed(2) + 'deg)'; else if (el._sway) el.firstChild.style.transform = 'rotate(' + (Math.sin(t * 1.75 + el._ph) * 4).toFixed(2) + 'deg)'; });
+    // the planet glides to a friend on a gentle ease-in-out, then drifts again
+    if (target !== null) {
+      if (!glide || glide.to !== target) glide = { from: angle, to: target, t0: now, dur: Math.min(2800, Math.max(1600, Math.abs(target - angle) * 22)) };
+      var k = Math.min(1, (now - glide.t0) / glide.dur), e = 0.5 - 0.5 * Math.cos(Math.PI * k);
+      angle = glide.from + (glide.to - glide.from) * e;
+      if (k >= 1) { target = null; glide = null; vel = 0; }
+    } else { vel += (1.2 - vel) * Math.min(1, dt * 0.7); angle += vel * dt; }   // eases back up to an easy 1.2° a second
+    spinner.style.transform = 'rotate(' + angle.toFixed(3) + 'deg)';
+    $$('.planted', spinner).forEach(function (el) { if (el._sway === 'bob') el.firstChild.style.transform = 'translateY(' + (Math.sin(t * 0.85 + el._ph) * 1.6).toFixed(2) + 'px) rotate(' + (Math.sin(t * 0.6 + el._ph) * 2.5).toFixed(2) + 'deg)'; else if (el._sway) el.firstChild.style.transform = 'rotate(' + (Math.sin(t * 1.1 + el._ph) * 3.5).toFixed(2) + 'deg)'; });
 
     // the sun or moon friend swings round the planet (SkyOrbit)
-    var a = (t / 30 % 1) * 2 * Math.PI, sw = 0.5 - 0.5 * Math.cos(t / 23 * 2 * Math.PI), rr = 165 + 30 * sw;   // the app swings wider; kept close here so the moon stays clear of the words
+    var a = (t / 44 % 1) * 2 * Math.PI, sw = 0.5 - 0.5 * Math.cos(t / 23 * 2 * Math.PI), rr = 165 + 30 * sw;   // the app swings wider; kept close here so the moon stays clear of the words
     var orb = $('#orbiter'); orb.style.transform = 'translate(' + (180 + rr * Math.cos(a) - 24).toFixed(1) + 'px,' + (384 + rr * Math.sin(a) - 24).toFixed(1) + 'px)' + (tod.id === 'day' ? ' rotate(' + (Math.sin(t * 2) * 8).toFixed(1) + 'deg)' : '');
 
     // Pip
-    look.x += (lookT.x - look.x) * 0.12; look.y += (lookT.y - look.y) * 0.12;
+    var lk = 1 - Math.exp(-dt * 4); look.x += (lookT.x - look.x) * lk; look.y += (lookT.y - look.y) * lk;
     var off = 7.98 * 0.3;
     pupL.setAttribute('cx', (27.55 + look.x * off).toFixed(2)); pupL.setAttribute('cy', (29.64 + look.y * off).toFixed(2));
     pupR.setAttribute('cx', (48.45 + look.x * off).toFixed(2)); pupR.setAttribute('cy', (29.64 + look.y * off).toFixed(2));
     var br = Math.sin(t / 1.6 * Math.PI), sx = 1.005 + br * 0.025, sy = 0.995 - br * 0.025, lift = 0, sq = 1;
     if (hopT > 0) {
       var h = (now - hopT) / 1000;
-      if (h < 0.12) sq = 1 - 0.14 * (h / 0.12);
-      else if (h < 0.36) { var q = (h - 0.12) / 0.24; lift = -34 * Math.sin(q * Math.PI / 2); sq = 0.86 + 0.2 * q; }
-      else if (h < 0.56) { var q2 = (h - 0.36) / 0.2; lift = -34 * (1 - q2 * q2); sq = 1.06; }
-      else if (h < 0.9) { sq = 1 + 0.06 * Math.cos((h - 0.56) / 0.34 * Math.PI * 2) * (1 - (h - 0.56) / 0.34); }
+      h = h / 1.5;   // a slower, gentler hop than the app's
+      if (h < 0.12) sq = 1 - 0.08 * Math.sin(h / 0.12 * Math.PI / 2);
+      else if (h < 0.36) { var q = (h - 0.12) / 0.24; lift = -22 * Math.sin(q * Math.PI / 2); sq = 0.92 + 0.11 * q; }
+      else if (h < 0.6) { var q2 = (h - 0.36) / 0.24; lift = -22 * Math.cos(q2 * Math.PI / 2); sq = 1.03 - 0.03 * q2; }
+      else if (h < 1) { sq = 1 + 0.03 * Math.cos((h - 0.6) / 0.4 * Math.PI * 2) * (1 - (h - 0.6) / 0.4); }
       else hopT = -1;
     }
     pipInner.setAttribute('transform', 'translate(0 ' + lift.toFixed(2) + ') translate(38 72.2) scale(' + (sx * (2 - sq)).toFixed(3) + ' ' + (sy * sq).toFixed(3) + ') translate(-38 -72.2)');
@@ -246,8 +252,12 @@
       es.forEach(function (e) { var v = e.target; if (e.isIntersecting) { v.preload = 'auto'; var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); });
     }, { threshold: 0.3 });
     $$('main video').forEach(function (v) { vio.observe(v); });
-    var rio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }); }, { threshold: 0.15 });
-    $$('.rise').forEach(function (el) { rio.observe(el); });
+    var rio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }); }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    $$('.rise').forEach(function (el) {
+      var sib = el.parentElement ? [].filter.call(el.parentElement.children, function (c) { return c.classList.contains('rise'); }) : [];
+      var k = sib.indexOf(el); if (k > 0) el.style.transitionDelay = Math.min(k, 5) * 0.12 + 's';
+      rio.observe(el);
+    });
     var dock = $('#dock');
     var heroSeen = true, footSeen = false, foot = $('.groundbar');
     function dockUpdate() { dock.classList.toggle('on', !heroSeen && !footSeen); }
